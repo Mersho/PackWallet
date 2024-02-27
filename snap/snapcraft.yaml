@@ -16,6 +16,7 @@ parts:
     build-packages:
       - dotnet-sdk-6.0
     stage-packages:
+      - dotnet6
       - libicu70
 
 apps:
