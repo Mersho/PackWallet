@@ -11,7 +11,6 @@ parts:
   packwallet:
     plugin: dotnet
     dotnet-build-configuration: Release
-    dotnet-self-contained-runtime-identifier: linux-x64
     source: PackWallet
     source-type: local
     build-packages:
