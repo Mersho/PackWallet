@@ -26,3 +26,31 @@ jobs:
       with:
         name: BuildArtifact
         path: ./publish
+
+  package-snap:
+    runs-on: ubuntu-22.04
+
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Snapcraft
+      run: sudo snap install snapcraft --classic
+
+    - name: Build Snap package
+      run: sudo snapcraft --destructive-mode
+
+    - name: Install snap
+      # dangerous because it's a local snap (not one from the SnapStore)
+      run: sudo snap install --dangerous *.snap
+
+    - name: Test snap
+      run: packwallet
+
+    - name: Upload Snap artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PackWalletSnap
+        path: ./*.snap
