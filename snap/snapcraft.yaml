@@ -1,0 +1,24 @@
+name: packwallet
+version: '1.0.0'
+summary: My awesome .NET app
+description: |
+  This app does amazing things with .NET!
+
+base: core22
+confinement: strict
+
+parts:
+  packwallet:
+    plugin: dotnet
+    dotnet-build-configuration: Release
+    dotnet-self-contained-runtime-identifier: linux-x64
+    source: PackWallet
+    source-type: local
+    build-packages:
+      - dotnet-sdk-6.0
+    stage-packages:
+      - libicu70
+
+apps:
+  packwallet:
+    command: PackWallet
