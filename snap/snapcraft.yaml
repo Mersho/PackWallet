@@ -10,17 +10,10 @@ confinement: strict
 parts:
   packwallet:
     plugin: dotnet
-    dotnet-build-configuration: Release
     source: PackWallet
     source-type: local
     build-packages:
       - dotnet-sdk-6.0
-    stage-packages:
-      - dotnet-sdk-6.0
-      - dotnet-runtime-6.0
-      - dotnet6
-      - dotnet-host
-      - libicu70
 
 apps:
   packwallet:
