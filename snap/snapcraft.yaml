@@ -19,7 +19,33 @@ parts:
     override-build: |
       dotnet build --configuration Release
       dotnet publish -r linux-x64 -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
-      chmod 0755 $SNAPCRAFT_PART_INSTALL
+      chmod 0755 $SNAPCRAFT_PART_INSTALL/PackWallet
+
+  packwallet-arm64:
+    plugin: dotnet
+    source: PackWallet
+    source-type: local
+    build-packages:
+      - dotnet-sdk-6.0
+    stage-packages:
+      - libicu70
+    override-build: |
+      dotnet build --configuration Release
+      dotnet publish -r linux-arm64 -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
+      chmod 0755 $SNAPCRAFT_PART_INSTALL/PackWallet
+
+  packwallet-arm:
+    plugin: dotnet
+    source: PackWallet
+    source-type: local
+    build-packages:
+      - dotnet-sdk-6.0
+    stage-packages:
+      - libicu70
+    override-build: |
+      dotnet build --configuration Release
+      dotnet publish -r linux-arm -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
+      chmod 0755 $SNAPCRAFT_PART_INSTALL/PackWallet
 
 apps:
   packwallet:
