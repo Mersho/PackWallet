@@ -5,18 +5,35 @@ description: |
   This app does amazing things with .NET!
 
 base: core22
+architectures:
+  - build-on: [amd64]
+    build-for: [amd64]
+  - build-on: [amd64, arm64]
+    build-for: [arm64]
 confinement: strict
 
 parts:
   packwallet:
     plugin: dotnet
-    dotnet-build-configuration: Release
     source: PackWallet
     source-type: local
     build-packages:
       - dotnet-sdk-6.0
     stage-packages:
       - libicu70
+    override-build: |
+      case $SNAPCRAFT_ARCH_TRIPLET in
+        "aarch64-linux-gnu")
+          ARCH="linux-arm64"
+          ;;
+        "x86_64-linux-gnu")
+          ARCH="linux-x64"
+          ;;
+      esac
+        
+      dotnet build --configuration Release
+      dotnet publish -r $ARCH -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
+      chmod 0755 $SNAPCRAFT_PART_INSTALL/PackWallet
 
 apps:
   packwallet:
