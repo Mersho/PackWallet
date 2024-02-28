@@ -14,8 +14,9 @@ parts:
     source-type: local
     build-packages:
       - dotnet-sdk-6.0
+    stage-snaps:
+      - dotnet-runtime-60
     stage-packages:
-      - dotnet-runtime-6.0
       - libicu70
 
 apps:
