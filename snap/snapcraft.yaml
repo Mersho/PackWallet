@@ -10,34 +10,16 @@ confinement: strict
 parts:
   packwallet-x64:
     plugin: dotnet
-    dotnet-build-configuration: Release
-    dotnet-self-contained-runtime-identifier: linux-x64
     source: PackWallet
     source-type: local
     build-packages:
       - dotnet-sdk-6.0
     stage-packages:
       - libicu70
-  packwallet-arm:
-    plugin: dotnet
-    dotnet-build-configuration: Release
-    dotnet-self-contained-runtime-identifier: linux-arm
-    source: PackWallet
-    source-type: local
-    build-packages:
-      - dotnet-sdk-6.0
-    stage-packages:
-      - libicu70
-  packwallet-arm64:
-    plugin: dotnet
-    dotnet-build-configuration: Release
-    dotnet-self-contained-runtime-identifier: linux-arm64
-    source: PackWallet
-    source-type: local
-    build-packages:
-      - dotnet-sdk-6.0
-    stage-packages:
-      - libicu70
+    override-build: |
+      dotnet build --configuration Release
+      dotnet publish -r linux-x64 -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
+      chmod 0755 $SNAPCRAFT_PART_INSTALL
 
 apps:
   packwallet:
