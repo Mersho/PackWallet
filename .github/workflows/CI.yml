@@ -44,13 +44,19 @@ jobs:
 
     - name: Install snap
       # dangerous because it's a local snap (not one from the SnapStore)
-      run: sudo snap install --dangerous *.snap
+      run: sudo snap install --dangerous *_amd64.snap
 
     - name: Test snap
       run: packwallet
 
-    - name: Upload Snap artifact
+    - name: Upload amd64 Snap artifact
       uses: actions/upload-artifact@v4
       with:
-        name: PackWalletSnap
-        path: ./*.snap
+        name: PackWalletSnapAmd64
+        path: ./*_amd64.snap
+    
+    - name: Upload arm64 Snap artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PackWalletSnapArm64
+        path: ./*_arm64.snap
