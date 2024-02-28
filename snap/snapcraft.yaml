@@ -5,10 +5,13 @@ description: |
   This app does amazing things with .NET!
 
 base: core22
+architectures:
+  - build-on: arm64
+  - build-on: amd64
 confinement: strict
 
 parts:
-  packwallet-x64:
+  packwallet:
     plugin: dotnet
     source: PackWallet
     source-type: local
@@ -17,34 +20,17 @@ parts:
     stage-packages:
       - libicu70
     override-build: |
+      case $SNAPCRAFT_ARCH_TRIPLET in
+        "aarch64-linux-gnu")
+          ARCH="linux-arm64"
+          ;;
+        "x86_64-linux-gnu")
+          ARCH="linux-x64"
+          ;;
+      esac
+        
       dotnet build --configuration Release
-      dotnet publish -r linux-x64 -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
-      chmod 0755 $SNAPCRAFT_PART_INSTALL/PackWallet
-
-  packwallet-arm64:
-    plugin: dotnet
-    source: PackWallet
-    source-type: local
-    build-packages:
-      - dotnet-sdk-6.0
-    stage-packages:
-      - libicu70
-    override-build: |
-      dotnet build --configuration Release
-      dotnet publish -r linux-arm64 -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
-      chmod 0755 $SNAPCRAFT_PART_INSTALL/PackWallet
-
-  packwallet-arm:
-    plugin: dotnet
-    source: PackWallet
-    source-type: local
-    build-packages:
-      - dotnet-sdk-6.0
-    stage-packages:
-      - libicu70
-    override-build: |
-      dotnet build --configuration Release
-      dotnet publish -r linux-arm -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
+      dotnet publish -r $ARCH -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
       chmod 0755 $SNAPCRAFT_PART_INSTALL/PackWallet
 
 apps:
